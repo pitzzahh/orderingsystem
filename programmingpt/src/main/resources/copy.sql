@@ -1,5 +1,8 @@
+
+DROP SEQUENCE IF EXISTS menu_items_id_seq;
 CREATE SEQUENCE menu_items_id_seq INCREMENT BY 11;
 
+DROP TABLE IF EXISTS menu_items;
 CREATE TABLE menu_items
 (
     id              integer PRIMARY KEY DEFAULT nextval('menu_items_id_seq'),
@@ -30,8 +33,10 @@ CREATE TABLE order_items
     "order" integer DEFAULT NULL
 );
 
+DROP SEQUENCE IF EXISTS order_items_id_seq;
 CREATE SEQUENCE orders_id_seq INCREMENT BY 2;
 
+DROP TABLE IF EXISTS orders;
 CREATE TABLE orders
 (
     id       integer PRIMARY KEY DEFAULT nextval('orders_id_seq'),
@@ -43,8 +48,10 @@ CREATE TABLE orders
     "user"   integer             DEFAULT NULL
 );
 
+DROP SEQUENCE IF EXISTS orders_id_seq;
 CREATE SEQUENCE users_id_seq INCREMENT BY 3;
 
+DROP TABLE IF EXISTS users;
 CREATE TABLE users
 (
     id              integer PRIMARY KEY   DEFAULT nextval('users_id_seq'),
