@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 public class MyOrderFrame extends JFrame {
-    private Map<Integer, OrderItem> menuItemIdToOrderItemMap = new HashMap<>();
-    private List<MenuItem> menuItems;
+    private final Map<Integer, OrderItem> menuItemIdToOrderItemMap = new HashMap<>();
+    public static JTable table;
     private Object[][] orderItemsData = {
         {"foo", "2x", "200.00"},
         {"bar", "2x", "200.00"},
@@ -45,7 +45,7 @@ public class MyOrderFrame extends JFrame {
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createTitledBorder("Menu"));
         panel.setLayout(new GridLayout(0, 2));
-        menuItems = DbUtils.getMenuItems();
+        List<MenuItem> menuItems = DbUtils.getMenuItems();
         for (MenuItem menuItem : menuItems) {
             String text = menuItem.getName() + " - " + menuItem.getFormattedPrice();
             JButton menuItemBtn = new JButton(menuItem.getShortName() + " - " + menuItem.getFormattedPrice());
@@ -67,8 +67,6 @@ public class MyOrderFrame extends JFrame {
         return panel;
     }
 
-    private JTable table;
-
     private Component getOrderItems() {
         table = new JTable(orderItemsData, new String[] {"Item", "Qty", "Subtotal"});
         JScrollPane pane = new JScrollPane(table);
@@ -76,6 +74,7 @@ public class MyOrderFrame extends JFrame {
         return pane;
     }
 
+    //    // TODO: add table refresh implementation
     private void refreshTableData() {
         String[][] data = new String[4][3];
         int i = 0;
