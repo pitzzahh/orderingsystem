@@ -7,17 +7,14 @@ import com.mycompany.programmingpt.util.DbUtils;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MyOrderFrame extends JFrame {
     private final Map<Integer, OrderItem> menuItemIdToOrderItemMap = new HashMap<>();
-    public static JTable table;
-    private Object[][] orderItemsData = {
-        {"foo", "2x", "200.00"},
-        {"bar", "2x", "200.00"},
-    };
+    public JTable table;
 
     public MyOrderFrame() {
         create();
@@ -58,8 +55,8 @@ public class MyOrderFrame extends JFrame {
                 orderItem.setQty(0);
                 menuItemIdToOrderItemMap.putIfAbsent(menuItem.getId(), orderItem);
                 menuItemIdToOrderItemMap.get(menuItem.getId()).incrementQty();
+                System.out.println("CALLED");
                 refreshTableData();
-                table.setModel(new DefaultTableModel());
             });
             panel.add(menuItemBtn);
         }
@@ -68,23 +65,26 @@ public class MyOrderFrame extends JFrame {
     }
 
     private Component getOrderItems() {
-        table = new JTable(orderItemsData, new String[] {"Item", "Qty", "Subtotal"});
+        table = new JTable(new DefaultTableModel(new String[] {"Item", "Qty", "Subtotal"}, 0));
         JScrollPane pane = new JScrollPane(table);
         pane.setBorder(BorderFactory.createTitledBorder("Order"));
         return pane;
     }
 
-    //    // TODO: add table refresh implementation
     private void refreshTableData() {
-        String[][] data = new String[4][3];
-        int i = 0;
-        for (OrderItem orderItem : menuItemIdToOrderItemMap.values()) {
-            data[i++] = new String[]{orderItem.getMenu().getName(), orderItem.getQty() + "x", String.valueOf(orderItem.getSubTotal())};
+        DefaultTableModel defaultTableModel = (DefaultTableModel) table.getModel();
+        defaultTableModel.setRowCount(0);
+        Object[] data = new Object[defaultTableModel.getColumnCount()];
+        System.out.println("data = " + Arrays.toString(data));
+        for (OrderItem item : menuItemIdToOrderItemMap.values()) {
+            data[0] = item.getMenu().getName();
+            data[1] = item.getQty() + "x";
+            data[2] = item.getSubTotal();
+            defaultTableModel.addRow(data);
         }
-        orderItemsData = data;
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MyOrderFrame());
+        SwingUtilities.invokeLater(MyOrderFrame::new);
     }
 }
